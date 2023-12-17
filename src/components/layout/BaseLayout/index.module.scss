@@ -1,0 +1,18 @@
+@import "../../../assets/sass/abstracts/mixin";
+
+.private_content {
+  max-width: 1652px;
+  @include desktop {
+    padding: 95px 0px 0px 160px;
+    margin: -93px auto 0;
+  }
+  @include tablet {
+    padding: 24px 20px;
+    margin: -93px auto 0;
+  }
+  @include mobile {
+    padding: 0 12px;
+    margin: -22px auto 0;
+  }
+  
+}

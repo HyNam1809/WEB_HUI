@@ -1,12 +1,11 @@
 import { ConfigProvider } from 'antd';
 import { Outlet } from 'react-router-dom';
-import Header from '../Header';
-// import Sidebar from '../SideBar';
+// import Header from '../Header';
+import Sidebar from '../SideBar';
 import styles from './index.module.scss';
 import React, { useEffect, useRef, useState } from 'react';
 // import ModalConfirm, { ModalConfirmRef } from '../components/common/Modal/ModalConfirm';
 import storage from '../../../utils/sessionStorage';
-import { useDispatch } from 'react-redux';
 // import authActions from 'features/auth/services/actions';
 import ModalConfirm from '../../common/Modal/ModalConfirm';
 
@@ -21,7 +20,6 @@ const BaseLayout = () => {
   const [isShowSidebar, setIsShowSidebar] = useState(false);
   const isConfirmDevice = storage.isConfirmDevice.get();
   const modalConfirmRef = useRef<ModalConfirmRef>(null);
-  const dispatch = useDispatch();
 
   useEffect(() => {
     if(isConfirmDevice) {
@@ -45,12 +43,12 @@ const BaseLayout = () => {
       }}
     >
       <div className='container'>
-        <Header />
+        {/* <Header /> */}
         <main className={styles.private_content}>
-          {/* <Sidebar
+          <Sidebar
             setIsShowSidebar={setIsShowSidebar}
             isShowSidebar={isShowSidebar}
-          /> */}
+          />
           <div className={`private-wrapper ${isShowSidebar && 'is-show-sidebar'}`}>
             <div className={styles.content_inner}>
               <Outlet />

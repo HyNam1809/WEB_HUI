@@ -96,10 +96,20 @@ const LoginPageStyled = styled.div`
    height: 66px;
    display: flex;
    align-items: center;
+   &:focus {
+        border-color: transparent;
+        box-shadow: none !important;
+        border: 1px solid #000000;
+    }
    .ant-input {
     width: 100%;
     height: 60px;
     padding: 8px 8px !important;
+    &:focus {
+        border-color: transparent;
+        box-shadow: none !important;
+        border: 0px solid #000000;
+    }
 }
 }
 
@@ -107,6 +117,11 @@ const LoginPageStyled = styled.div`
     width: 100%;
     height: 66px;
     padding: 8px 16px !important;
+    &:focus {
+        border-color: transparent;
+        box-shadow: none !important;
+        border: 1px solid #000000;
+    }
 }
 
 .ant-btn-default {
@@ -116,6 +131,7 @@ const LoginPageStyled = styled.div`
     font-weight: 500;
     background: #EF503A;
     color: #FFFFFF;
+    transition: all 0.3s ease-in;
     &:not(:disabled):not(.ant-btn-disabled):hover {
         background: #FFF0E2;
         border: 1px solid transparent;

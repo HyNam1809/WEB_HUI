@@ -21,7 +21,7 @@ const useRefreshToken = () => {
     useEffect(() => { refreshToken(); }, []);
     const shield = (Component: ShieldComponent) => {
         // if (!token) return <Navigate to={'/sign-in'} replace />;
-        if (!token) return <Navigate to={'/'} replace />;
+        if (token) return <Navigate to={'/'} replace />;
         // return <Suspense><Component /></Suspense>;
         return <Component />;
     };

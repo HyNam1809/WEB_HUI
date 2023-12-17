@@ -1,7 +1,7 @@
 import { Provider } from 'react-redux';
-import './App.css';
 import store from './store';
 import React from 'react';
+import './App.scss';
 import { Route, Routes } from 'react-router-dom';
 import HomePage from './features/Home';
 import LoginPage from './features/Auth/Login';
