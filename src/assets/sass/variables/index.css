@@ -1,0 +1,88 @@
+:root {
+  --font-color: var(--color-primary);
+}
+
+:root {
+  --color-primary: #363565;
+  --color-green: #4a9d77;
+  --color-primary-01: #e2f4ec;
+  --color-primary-02: #f8f8ff;
+  --color-primary-03: #f4fffa;
+  --color-red: #e95060;
+  --color-red-01: #ffeff1;
+  --color-white: #fff;
+  --color-white-01: #f0f2f7;
+  --color-white-02: #e4e8ee;
+  --color-black: #000;
+  --color-purple: #c3c2e0;
+  --color-purple-01: #ccd1fe;
+  --color-purple-02: #3331a7;
+  --color-purple-03: #e7e9f3;
+  --color-purple-04: #60669f;
+  --color-purple-05: #e2e5ff;
+  --color-purple-06: #949bda;
+  --color-purple-07: #b1b8f7;
+  --color-purple-08: #dddcff;
+  --color-purple-blur: rgba(54, 53, 101, 0.8);
+  --color-yellow: #f7c957;
+  --color-yellow-01: #ffc107;
+  --color-yellow-02: #fadb14;
+  --color-blue-01: #4299e1;
+  --color-blue-02: #90cdf4;
+  --color-overlay: rgba(195, 194, 224, 0.2);
+  --color-gray: #c4c4c4;
+}
+
+:root {
+  --font-base: "Inter", sans-serif;
+}
+
+:root {
+  --icon-gt: url("/assets/icons/ico_gt.svg");
+  --icon-search: url("/assets/icons/ico_search.svg");
+  --icon-search-big: url("/assets/icons/ico_search_big.svg");
+  --icon-notification: url("/assets/icons/ico_notification.svg");
+  --icon-email: url("/assets/icons/ico_notification.svg");
+  --icon-menu: url("/assets/icons/ico_menu.svg");
+  --icon-menu-close: url("/assets/icons/ico_menu_close.svg");
+  --icon-arrow-back: url("/assets/icons/ico_arrow_back.svg");
+  --icon-filter: url("/assets/icons/ico_filter.svg");
+  --icon-export: url("/assets/icons/ico_export.svg");
+  --icon-export-vertical: url("/assets/icons/ico_export_vertical.svg");
+  --icon-import-vertical: url("/assets/icons/ico_import_vertical.svg");
+  --icon-pagination-left: url("/assets/icons/ico_pagination_left.svg");
+  --icon-pagination-right: url("/assets/icons/ico_pagination_right.svg");
+  --icon-action-favorite: url("/assets/icons/ico_action_favorite.svg");
+  --icon-action-favorite-active: url("/assets/icons/ico_action_favorite_active.svg");
+  --icon-action-send: url("/assets/icons/ico_action_send.svg");
+  --icon-action-remove: url("/assets/icons/ico_action_remove.svg");
+  --icon-remove-red: url("/assets/icons/ico_remove_red.svg");
+  --icon-delete-red: url("/assets/icons/ico_delete_red.svg");
+  --icon-action-edit: url("/assets/icons/ico_action_edit.svg");
+  --icon-action-info: url("/assets/icons/ico_action_info.svg");
+  --icon-action_export: url("/assets/icons/ico_action_export.svg");
+  --icon-action_view: url("/assets/icons/ico_action_view.svg");
+  --icon-action-more: url("/assets/icons/ico_action_more.svg");
+  --icon-delete: url("/assets/icons/ico_delete.svg");
+  --icon-view-grid: url("/assets/icons/ico_view_grid.svg");
+  --icon-view-grid-active: url("/assets/icons/ico_view_grid_active.svg");
+  --icon-view-list: url("/assets/icons/ico_view_list.svg");
+  --icon-view-list-active: url("/assets/icons/ico_view_list_active.svg");
+  --icon-view-calendar: url("/assets/icons/ico_view_calendar.svg");
+  --icon-view-calendar-active: url("/assets/icons/ico_view_calendar_active.svg");
+  --icon-settings-edit: url("/assets/icons/ico_settings_edit.svg");
+  --icon-settings-copy: url("/assets/icons/ico_settings_copy.svg");
+  --icon-settings-close: url("/assets/icons/ico_settings_close.svg");
+  --icon-settings-split: url("/assets/icons/ico_setting_split.svg");
+  --icon-settings-user: url("/assets/icons/ico_settings_user.svg");
+  --icon-plus: url("/assets/icons/ico_plus.svg");
+  --icon-plus-green: url("/assets/icons/ico_plus_green.svg");
+  --icon-send: url("/assets/icons/ico_send.svg");
+  --icon-help-circle: url("/assets/icons/ico_help_circle.svg");
+  --icon-right-green: url("/assets/icons/ico_right_green.svg");
+  --icon-warning: url("/assets/icons/ico_warning.svg");
+  --icon-send_green: url("/assets/icons/ico_send_green.svg");
+  --icon-clock: url("/assets/icons/ico_clock.svg");
+
+}
+/*# sourceMappingURL=index.css.map */

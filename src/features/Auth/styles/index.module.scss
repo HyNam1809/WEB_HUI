@@ -1,0 +1,30 @@
+@import "../../../assets/sass/abstracts/mixin";
+
+.container {
+  height: 100vh;
+  display: flex;
+
+  .bg_login {
+    flex: 2;
+    background-position-x: center;
+    background-image: url('https://i.fbcd.co/products/original/6608b9ecff858d3b1ccb13ca4276eff237707584212c7a493fc2c031c18b2112.jpg');
+  }
+
+  .form {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 16px;
+    padding: 0 20px;
+
+    .titleLogin {
+      font-size: 24px;
+      text-align: center;
+      font-weight: 700;
+    }
+  }
+}
+
