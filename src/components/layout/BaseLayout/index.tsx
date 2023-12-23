@@ -1,6 +1,6 @@
 import { ConfigProvider } from 'antd';
 import { Outlet } from 'react-router-dom';
-// import Header from '../Header';
+import Header from '../Header';
 import Sidebar from '../SideBar';
 import styles from './index.module.scss';
 import React, { useEffect, useRef, useState } from 'react';
@@ -43,7 +43,7 @@ const BaseLayout = () => {
       }}
     >
       <div className='container'>
-        {/* <Header /> */}
+        <Header />
         <main className={styles.private_content}>
           <Sidebar
             setIsShowSidebar={setIsShowSidebar}

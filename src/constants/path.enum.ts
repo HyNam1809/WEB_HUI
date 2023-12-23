@@ -1,4 +1,7 @@
 export const PATH = {
-    Home: '/private/Home',
-    Login: '/',
+    Room: '/private/room',
+    Customer: '/private/customer',
+    Invoice: '/private/invoice',
+    DetailRoom: '/private/RoomDetail',
+    Logout: '/',
   };

@@ -101,6 +101,22 @@ section {
 }
 body {
   line-height: 1;
+  scrollbar-width: thin;
+  /* Firefox */
+  scrollbar-color: #ccc transparent;
+}
+
+body::-webkit-scrollbar {
+  width: 1px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 4px;
+}
+
+body::-webkit-scrollbar-track {
+  background-color: transparent;
 }
 ol,
 ul {

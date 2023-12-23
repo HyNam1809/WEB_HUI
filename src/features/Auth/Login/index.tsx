@@ -1,77 +1,169 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import style from '../styles/index.module.scss';
-import { Button, Form, message } from 'antd';
-import { IStaffFormInput } from '../../../assets/Types/Input/Infex';
-import { get } from 'lodash';
-import StaffFormContent from '../../../components/common/Imput';
+import { Form, Input } from 'antd';
+// import { get } from 'lodash';
 import styled from 'styled-components';
-
+import { useSetLoadingPage } from '../../../services/UI/LoadingPage';
+// import apisAuth from '../services/api';
+// import storage from '../../../utils/sessionStorage';
+// import { useAppDispatch } from '../../../store/hooks';
+import { useNavigate } from 'react-router-dom';
+// import actions from '../services/actions';
+// import { getDeviceId } from '../../../utils/unit';
 const LoginPage = () => {
     const [form] = Form.useForm();
+    const setIsLoading = useSetLoadingPage();
+    const [error, ] = useState('');
+    const [email, setEmail] = useState('');
+    // const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+    // const [pageDisplay, setPageDisplay] = useState(false);
+    // const modalConfirmRef = useRef<any>(null);
 
-    const [errors,] = useState<any>();
+    // const setToken = (_token: string) => {
+    //     dispatch(actions.setToken(_token));
+    // };
 
-    const getFeedback = (text: string) => {
-        if (!text) return {};
-        return ({
-            validateStatus: text ? 'error' : undefined,
-            help: text ? text : undefined,
-        });
+    // const setupLogin = (resData: any) => {
+    //     // setToken(resData?.access_token ?? '');
+    //     const merchant_code = resData?.user?.merchant?.merchant_code;
+    //     storage.merchantCode.set(merchant_code);
+    //     storage.isConfirmDevice.set('');
+    //     storage.merchantName.set(resData?.user?.merchant?.merchant_name);
+    //     storage.merchantId.set(resData?.user?.merchant?.merchant_id);
+
+
+    //     // dispatch(actions.login.success(resData));
+    //     // dispatch(settingActions.getSetting.fetch());
+
+    //     navigate(
+    //         '/private/room'
+    //     );
+    // };
+
+    const login = async (values: any) => {
+        const { email, password } = values;
+        // const device_id = getDeviceId();
+        setIsLoading(true);
+        if (email || password) {
+            navigate(
+                '/private/room'
+            );
+        }
+        // try {
+        //     const res = await apisAuth.login({ email, password, device_id });
+
+        //     if (!res.data?.data) throw { response: res };
+
+        //     const resData = res?.data?.data as any;
+
+        //     if (res.data?.data.device_confirm) {
+        //         modalConfirmRef.current?.show({
+        //             title: 'Xác nhận đăng nhập?',
+        //             msg: 'Chào mừng trở lại! Chúng tôi đã phát hiện một phiên đăng nhập khác từ một thiết bị khác bằng tài khoản của bạn. Để tiếp tục, vui lòng nhập số pin của bạn và nhấp vào \'Tiếp tục\'',
+        //             // submit: (values: any) => handleLoginConfirm(values, resData)
+        //         });
+        //         return;
+        //     }
+
+        //     setupLogin(resData);
+
+        //     // const pathname = storage.pathname.get();
+
+        // } catch (error) {
+        //     const message = get(
+        //         error,
+        //         'response.data.error.message',
+        //         'Một lỗi đã xảy ra. Vui lòng thử lại !'
+        //     );
+        //     setError(message);
+        //     dispatch(actions.login.fail({}));
+        // } finally {
+        //     setIsLoading(false);
+        // }
     };
 
-    const inputs: IStaffFormInput[] = useMemo(() => [
-        {
-            label: 'Tài khoản',
-            name: 'userName',
-            placeholder: 'Nhập tài khoản',
-            type: 'text',
-            rules: [
-                {
-                    validator(_, value,) {
-                        if (!value?.trim()) return Promise.reject(new Error('Vui lòng nhập tài khoản'));
-                        return Promise.resolve();
-                    },
-                },
-            ],
-            ...getFeedback(get(errors, ['full_name'])),
-        },
-        {
-            label: 'Mật khẩu',
-            name: 'password',
-            placeholder: 'Nhập mật khẩu',
-            type: 'password',
-            rules: [
-                // {
-                //     validator(_, value,) {
-                //         if (!value?.trim()) return Promise.reject(new Error('Vui lòng nhập mật khẩu'));
-                //         return Promise.resolve();
-                //     },
-                // },
-            ],
-            ...getFeedback(get(errors, ['password'])),
-        },
-    ], [errors]);
+    // useEffect(() => {
+    //     const currToken = storage.token.get();
+    //     if (currToken) {
+    //         navigate('/private/room');
+    //     } else {
+    //         setPageDisplay(true);
+    //     }
+    // }, []);
 
-    const handleSubmit = () => {
-        message.success('Login Success');
-    };
     return (
         <LoginPageStyled>
             <div className={style.container}>
                 <div className={style.bg_login}>
                 </div>
                 <div className={style.form}>
+
                     <Form
-                        className='form-info'
+                        onFinish={login}
+                        className='modal-form'
+                        layout='vertical'
                         form={form}
-                        onFinish={handleSubmit}
-                        scrollToFirstError
-                        layout='vertical'>
-                        <div className={style.titleLogin}>
-                            <h1>Đăng nhập Admin</h1>
-                        </div>
-                        <StaffFormContent inputs={inputs} />
-                        <Button htmlType='submit'>Đăng nhập</Button>
+                    >
+                        <h1 className={style.titleLogin}>Admin Đăng Nhập</h1>
+                        <Form.Item
+                            name={'email'}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Vui lòng nhập email!',
+                                },
+                                {
+                                    type: 'email',
+                                    message:
+                                        'Vui lòng nhập đúng định dạng email!',
+                                },
+                            ]}
+                        >
+                            <Input
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                type='email'
+                                placeholder={
+                                    'Nhập Email'
+                                }
+                                autoFocus
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            name={'password'}
+                            rules={[
+                                {
+                                    required: true,
+                                    message:
+                                        'Vui lòng nhập password',
+                                },
+                            ]}
+                        >
+                            <Input
+                                type='password'
+                                placeholder={
+                                    'Nhập mật khẩu'
+                                }
+                            />
+                        </Form.Item>
+                        {!!error && (
+                            <p
+                                style={{
+                                    color: 'var(--color-red)',
+                                    padding: '0 0 16px',
+                                }}
+                            >
+                                {error}
+                            </p>
+                        )}
+
+                        <button
+                            className='btn-submit'
+                            type='submit'
+                        >
+                            Đăng nhập
+                        </button>
                     </Form>
                 </div>
             </div>
@@ -85,6 +177,8 @@ const LoginPageStyled = styled.div`
 .ant-form {
     width: 100%;
     height: 500px;
+    align-items: center;
+    justify-content: center;
 }
 
 .ant-form-item-label >label {
@@ -124,7 +218,7 @@ const LoginPageStyled = styled.div`
     }
 }
 
-.ant-btn-default {
+button {
     width: 100%;
     height: 56px;
     font-size: 16px;

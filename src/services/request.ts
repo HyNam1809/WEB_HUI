@@ -4,13 +4,13 @@ import queryString from 'query-string';
 import lodash from '../utils/lodash';
 import storage from '../utils/sessionStorage';
 
-const DOMAIN = 'https://api.hui.com/';
+const DOMAIN = 'http://apihui.42web.io/';
 
 const axiosInstance = axios.create({
   baseURL: DOMAIN,
   headers: {
     Accept: 'application/json',
-    // 'Accept-Heya': 'application/myheya.heyapos',
+    cookie: '__test=9d87c3cb29be6bb0fe27162d3b970995',
   },
 });
 

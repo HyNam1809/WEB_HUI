@@ -1,0 +1,121 @@
+/* ChatPage.scss */
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 20px;
+}
+
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 20px;
+  /* Thanh cuộn */
+  scrollbar-width: thin;
+  /* Firefox */
+  scrollbar-color: #ccc transparent;
+  /* Firefox */
+}
+
+.messages::-webkit-scrollbar {
+  width: 8px;
+}
+
+.messages::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 4px;
+}
+
+.messages::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.no-messages {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.message {
+  display: flex;
+  margin-bottom: 10px;
+  align-items: flex-start;
+  // max-width: 80%;
+  word-wrap: break-word;
+  /* Đảm bảo tin nhắn không vượt quá chiều rộng */
+}
+
+.sent-by-me .message-info {
+  background-color: #b3d7fa;
+  /* Màu nền cho tin nhắn của người gửi */
+  color: rgb(0, 0, 0);
+  border-radius: 10px 10px 0 10px;
+  padding: 10px;
+  margin-left: auto;
+  /* Hiển thị tin nhắn của người gửi ở bên phải */
+  display: flex;
+  gap: 10px;
+}
+
+.received .message-info {
+  background-color: #f0f0f0;
+  /* Màu nền cho tin nhắn của người nhận */
+  border-radius: 10px 10px 10px 0;
+  padding: 10px;
+  margin-right: auto;
+  /* Hiển thị tin nhắn của người nhận ở bên trái */
+}
+
+.avatar img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.message-info {
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  gap: 10px
+}
+
+.user-name {
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.timestamp {
+  font-size: 12px;
+  color: #000000;
+}
+
+.input-container {
+  display: flex;
+  margin-top: 10px;
+}
+
+input[type="text"] {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-right: 10px;
+  height: 56px;
+
+  &:focus-visible {
+    border: 0px solid #ccc;
+  }
+}
+
+button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}

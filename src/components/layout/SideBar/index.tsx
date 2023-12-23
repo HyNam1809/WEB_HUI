@@ -15,16 +15,20 @@ const SideBar = (props: Props) => {
         return [
             {
                 text: 'Quản lý phòng',
-                path: PATH.Home,
+                path: PATH.Room,
                 // icon: <IconCalendar />,
             },
             {
                 text: 'Quản lý khách hàng',
-                path: PATH.Login,
+                path: PATH.Customer,
             },
             {
                 text: 'Quản lý hóa đơn',
-                path: PATH.Login,
+                path: PATH.Invoice,
+            },
+            {
+                text: 'Đang xuất',
+                path: PATH.Logout,
             },
 
         ];
@@ -51,7 +55,7 @@ const SideBar = (props: Props) => {
                             return (
                                 <li key={path} className={`${styles.navbar_item}`} onClick={e => e.stopPropagation()}>
                                     <NavLink
-                                        reloadDocument={path === PATH.Home}
+                                        reloadDocument={path === PATH.Room}
                                         to={path}
                                         style={({ isActive }) =>
                                             isActive ? activeStyle : undefined
