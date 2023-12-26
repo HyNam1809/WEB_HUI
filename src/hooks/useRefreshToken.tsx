@@ -8,7 +8,7 @@ type ShieldComponent = ((props: any) => JSX.Element) | React.LazyExoticComponent
 const useRefreshToken = () => {
     // const dispatch = useAppDispatch();
     // const token = authSelectors.getToken();
-    const token = '';
+    const token = localStorage.getItem('tokenUser');
     // const loading = uiSelector.getRefreshTokenLoading();
     const loading = '';
     const location = useLocation();
@@ -21,7 +21,7 @@ const useRefreshToken = () => {
     useEffect(() => { refreshToken(); }, []);
     const shield = (Component: ShieldComponent) => {
         // if (!token) return <Navigate to={'/sign-in'} replace />;
-        if (token) return <Navigate to={'/'} replace />;
+        if (!token) return <Navigate to={'/'} replace />;
         // return <Suspense><Component /></Suspense>;
         return <Component />;
     };

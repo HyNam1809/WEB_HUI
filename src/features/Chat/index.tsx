@@ -3,63 +3,116 @@ import './index.scss'; // Import your SCSS file
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { SendOutlined } from '@ant-design/icons';
+import axios from 'axios';
+
+interface Message {
+  id: number;
+  user: {
+    user_name: string;
+    user_avatar: string;
+  };
+  message: string;
+  created_at: string;
+  // Add any other properties present in your actual message object
+}
 
 const ChatPage = () => {
-  const currentUser = { name: 'Con người', avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT56eYhIKXNoVJBAFLf3NUdmloipjj6YYbCOQ&usqp=CAU' }; // Thay đổi thông tin người dùng hiện tại tại đây
-  const [messages, setMessages] = useState([
-    { user: { name: 'Con người', avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT56eYhIKXNoVJBAFLf3NUdmloipjj6YYbCOQ&usqp=CAU' }, text: 'Chào Con chó review!', timestamp: new Date() },
-    { user: { name: 'Con chó', avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6xo3BnpcGjxt40VQDiB-DdRM_3DtP4n1_FQ&usqp=CAU' }, text: 'Chào lại con người!', timestamp: new Date() },
-    { user: { name: 'Con người', avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT56eYhIKXNoVJBAFLf3NUdmloipjj6YYbCOQ&usqp=CAU' }, text: 'Hello!', timestamp: new Date() },
-    { user: { name: 'Con chó', avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6xo3BnpcGjxt40VQDiB-DdRM_3DtP4n1_FQ&usqp=CAU' }, text: 'Hi there!', timestamp: new Date() },
-    { user: { name: 'Con người', avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT56eYhIKXNoVJBAFLf3NUdmloipjj6YYbCOQ&usqp=CAU' }, text: 'Hello!', timestamp: new Date() },
-    { user: { name: 'Con chó', avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6xo3BnpcGjxt40VQDiB-DdRM_3DtP4n1_FQ&usqp=CAU' }, text: 'Hi there!', timestamp: new Date() },
-    { user: { name: 'Con người', avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT56eYhIKXNoVJBAFLf3NUdmloipjj6YYbCOQ&usqp=CAU' }, text: 'Hello!', timestamp: new Date() },
-    { user: { name: 'Con chó', avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6xo3BnpcGjxt40VQDiB-DdRM_3DtP4n1_FQ&usqp=CAU' }, text: 'Hi there!', timestamp: new Date() },
-    { user: { name: 'Con người', avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT56eYhIKXNoVJBAFLf3NUdmloipjj6YYbCOQ&usqp=CAU' }, text: 'Hello!', timestamp: new Date() },
-    { user: { name: 'Con chó', avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6xo3BnpcGjxt40VQDiB-DdRM_3DtP4n1_FQ&usqp=CAU' }, text: 'Hi there!', timestamp: new Date() },
-    { user: { name: 'Con người', avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT56eYhIKXNoVJBAFLf3NUdmloipjj6YYbCOQ&usqp=CAU' }, text: 'Hello!', timestamp: new Date() },
-    { user: { name: 'Con chó', avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6xo3BnpcGjxt40VQDiB-DdRM_3DtP4n1_FQ&usqp=CAU' }, text: 'Hi there!', timestamp: new Date() },
-    { user: { name: 'Con người', avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT56eYhIKXNoVJBAFLf3NUdmloipjj6YYbCOQ&usqp=CAU' }, text: 'Hello!', timestamp: new Date() },
-    { user: { name: 'Con chó', avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6xo3BnpcGjxt40VQDiB-DdRM_3DtP4n1_FQ&usqp=CAU' }, text: 'Hi there!', timestamp: new Date() },
-    { user: { name: 'Con người', avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT56eYhIKXNoVJBAFLf3NUdmloipjj6YYbCOQ&usqp=CAU' }, text: 'Hello!', timestamp: new Date() },
-    { user: { name: 'Con chó', avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6xo3BnpcGjxt40VQDiB-DdRM_3DtP4n1_FQ&usqp=CAU' }, text: 'Hi there!', timestamp: new Date() },
-    { user: { name: 'Con người', avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT56eYhIKXNoVJBAFLf3NUdmloipjj6YYbCOQ&usqp=CAU' }, text: 'Hello!', timestamp: new Date() },
-    { user: { name: 'Con chó', avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6xo3BnpcGjxt40VQDiB-DdRM_3DtP4n1_FQ&usqp=CAU' }, text: 'Hi there!', timestamp: new Date() },
-    { user: { name: 'Con người', avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT56eYhIKXNoVJBAFLf3NUdmloipjj6YYbCOQ&usqp=CAU' }, text: 'Hello!', timestamp: new Date() },
-    { user: { name: 'Con chó', avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6xo3BnpcGjxt40VQDiB-DdRM_3DtP4n1_FQ&usqp=CAU' }, text: 'Hi there!', timestamp: new Date() },
-    { user: { name: 'Con người', avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT56eYhIKXNoVJBAFLf3NUdmloipjj6YYbCOQ&usqp=CAU' }, text: 'Hello!', timestamp: new Date() },
-    { user: { name: 'Con chó', avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6xo3BnpcGjxt40VQDiB-DdRM_3DtP4n1_FQ&usqp=CAU' }, text: 'Hi there!', timestamp: new Date() },
-    { user: { name: 'Con người', avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT56eYhIKXNoVJBAFLf3NUdmloipjj6YYbCOQ&usqp=CAU' }, text: 'Hello!', timestamp: new Date() },
-    { user: { name: 'Con chó', avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6xo3BnpcGjxt40VQDiB-DdRM_3DtP4n1_FQ&usqp=CAU' }, text: 'Hi there!', timestamp: new Date() },
-    { user: { name: 'Con người', avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT56eYhIKXNoVJBAFLf3NUdmloipjj6YYbCOQ&usqp=CAU' }, text: 'Hello!', timestamp: new Date() },
-    { user: { name: 'Con chó', avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6xo3BnpcGjxt40VQDiB-DdRM_3DtP4n1_FQ&usqp=CAU' }, text: 'Hi there!', timestamp: new Date() },
-    { user: { name: 'Con người', avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT56eYhIKXNoVJBAFLf3NUdmloipjj6YYbCOQ&usqp=CAU' }, text: 'Hello!', timestamp: new Date() },
-    { user: { name: 'Con chó', avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6xo3BnpcGjxt40VQDiB-DdRM_3DtP4n1_FQ&usqp=CAU' }, text: 'Hi there!', timestamp: new Date() },
-    { user: { name: 'Con người', avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT56eYhIKXNoVJBAFLf3NUdmloipjj6YYbCOQ&usqp=CAU' }, text: 'Hello!', timestamp: new Date() },
-    { user: { name: 'Con chó', avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6xo3BnpcGjxt40VQDiB-DdRM_3DtP4n1_FQ&usqp=CAU' }, text: 'Hi there!', timestamp: new Date() },
-    { user: { name: 'Con người', avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT56eYhIKXNoVJBAFLf3NUdmloipjj6YYbCOQ&usqp=CAU' }, text: 'Hello!', timestamp: new Date() },
-    { user: { name: 'Con chó', avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6xo3BnpcGjxt40VQDiB-DdRM_3DtP4n1_FQ&usqp=CAU' }, text: 'Hi there!', timestamp: new Date() },
-    { user: { name: 'Con người', avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT56eYhIKXNoVJBAFLf3NUdmloipjj6YYbCOQ&usqp=CAU' }, text: 'Hello!', timestamp: new Date() },
-    { user: { name: 'Con chó', avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6xo3BnpcGjxt40VQDiB-DdRM_3DtP4n1_FQ&usqp=CAU' }, text: 'Hi there!', timestamp: new Date() },
-    { user: { name: 'Con người', avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT56eYhIKXNoVJBAFLf3NUdmloipjj6YYbCOQ&usqp=CAU' }, text: 'Hello!', timestamp: new Date() },
-    { user: { name: 'Con chó', avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6xo3BnpcGjxt40VQDiB-DdRM_3DtP4n1_FQ&usqp=CAU' }, text: 'Hi there!', timestamp: new Date() },
-    { user: { name: 'Con người', avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT56eYhIKXNoVJBAFLf3NUdmloipjj6YYbCOQ&usqp=CAU' }, text: 'Hello!', timestamp: new Date() },
-    { user: { name: 'Con chó', avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6xo3BnpcGjxt40VQDiB-DdRM_3DtP4n1_FQ&usqp=CAU' }, text: 'Hi there!', timestamp: new Date() },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const [userName, setUserName] = useState<any>();
+  
+
+  useEffect(() => {
+    const data = new FormData();
+    const tokenUser = localStorage.getItem('tokenUser');
+
+    const config = {
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: 'https://huionline.vn/api/auth/profile',
+        headers: {
+            'Authorization': `Bearer ${tokenUser}`,
+        },
+        data: data
+    };
+
+    axios.request(config)
+        .then((response: { data: any; }) => {
+            localStorage.setItem('responseUser', JSON.stringify(response.data.data.id));
+            
+            setUserName(response.data.data.name);
+        })
+        .catch((error: any) => {
+            console.log(error);
+        });
+}, []);
+
+  const currentUser = { user_name: userName, user_avatar: userName };
+
   const search = useLocation().search;
   const roomId = new URLSearchParams(search).get('roomId') || '';
 
-  const sendMessage = () => {
+  const fetchMessages = async () => {
+    try {
+      const response = await axios.get(`https://huionline.vn/api/message/room/${roomId}`);
+      const { data } = response.data;
+      console.log(data);
+      
+      setMessages(data);
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchMessages();
+  }, [roomId]);
+
+  const sendMessage = async () => {
     if (inputMessage.trim()) {
-      const newMessage = {
+      const newMessage: Message = {
+        id: messages.length + 1,
         user: currentUser,
-        text: inputMessage,
-        timestamp: new Date(),
+        message: inputMessage,
+        created_at: new Date().toLocaleString(),
       };
-      setMessages([...messages, newMessage]);
-      setInputMessage('');
+
+      try {
+        // Send the message to the API
+        await apiDSendMessage(newMessage);
+
+        // Update the local state with the new message
+        setMessages((prevMessages) => [...prevMessages, newMessage]);
+        setInputMessage('');
+      } catch (error) {
+        console.error('Error sending message:', error);
+      }
+    }
+  };
+
+  
+  const storedResponseUser  = localStorage.getItem('responseUser') || '';
+  const responseUser = storedResponseUser.slice(1, -1);
+  
+  const apiDSendMessage = async (newMessage: Message) => {
+    const data = new FormData();
+    data.append('room_id', roomId);
+    data.append('user_id', responseUser);
+    data.append('message', newMessage.message);
+
+    const config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: 'https://huionline.vn/api/message/postMess',
+      data: data
+    };
+
+    try {
+      const response = await axios.request(config);
+      console.log(JSON.stringify(response.data));
+    } catch (error) {
+      throw new Error('Failed to send message');
     }
   };
 
@@ -69,6 +122,7 @@ const ChatPage = () => {
 
   return (
     <ChatPageStyled>
+      {/* ... Your styled components and HTML structure */}
       <div className="chat-container">
         <div className="messages">
           {messages.length === 0 && (
@@ -77,22 +131,22 @@ const ChatPage = () => {
           <div className='title-chat'>
             <h1>Phòng Chat: {roomId}</h1>
           </div>
-          {messages.map((msg, index) => (
+          {messages.map((msg) => (
             <div
-              key={index}
-              className={`message ${msg.user.name === currentUser.name ? 'sent-by-me' : 'received'}`}
+              key={msg.id}
+              className={`message ${msg.user.user_name === currentUser.user_name ? 'sent-by-me' : 'received'}`}
             >
-              {msg.user.name !== currentUser.name && (
+              {msg.user.user_name !== currentUser.user_name && (
                 <div className="avatar">
-                  <img src={msg.user.avatar} alt={msg.user.name} />
+                  <img src={msg.user.user_avatar} alt={msg.user.user_name} />
                 </div>
               )}
               <div className="message-info">
-                {msg.user.name !== currentUser.name && (
-                  <div className="user-name">{msg.user.name}</div>
+                {msg.user.user_name !== currentUser.user_name && (
+                  <div className="user-name">{msg.user.user_name}</div>
                 )}
-                <div className="text">{msg.text}</div>
-                <div className="timestamp">{new Date(msg.timestamp).toLocaleString()}</div>
+                <div className="text">{msg.message}</div>
+                {/* <div className="timestamp">{new Date(msg.created_at).toLocaleString()}</div> */}
               </div>
             </div>
           ))}
@@ -106,7 +160,7 @@ const ChatPage = () => {
             placeholder="Nhập một tin nhắn..."
           />
           <button onClick={sendMessage}>
-          <SendOutlined />
+            <SendOutlined />
           </button>
         </div>
       </div>
@@ -118,6 +172,13 @@ export default ChatPage;
 
 const ChatPageStyled = styled.div`
 position: relative;
+
+.avatar {
+  img {
+    max-width: 40px;
+    max-height: 40px;
+  }
+}
 .title-chat {
   display: flex;
   align-items: center;

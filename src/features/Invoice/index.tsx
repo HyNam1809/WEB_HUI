@@ -4,6 +4,7 @@ import { Table } from 'antd';
 import styled from 'styled-components';
 import { ColumnsType } from 'antd/es/table';
 import { DataType } from './types';
+import { Link } from 'react-router-dom';
 
 
 
@@ -14,7 +15,10 @@ const InvoicePage = () => {
             title: 'Tên hóa đơn',
             dataIndex: 'title',
             key: 'title',
-            width: 130
+            width: 130,
+            render: (text: any, record: any) => {
+                return <Link to={`/private/detail-invoice?invoiceId=${record.id}`} className='content-item'>{text}</Link>;
+            },
         },
         {
             title: 'Nội dung',

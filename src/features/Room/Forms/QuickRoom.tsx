@@ -1,109 +1,73 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import StaffFormContent, { IStaffFormInput } from '../../../components/common/Imput';
-import { Button, Form } from 'antd';
-import { get } from 'lodash';
+import { Button, DatePicker, DatePickerProps, Form, Input, InputNumber } from 'antd';
+import { Dayjs } from 'dayjs';
+import axios from 'axios';
+import moment from 'moment';
 
 const QuickRoomPage = () => {
     const search = useLocation().search;
     const roomId = new URLSearchParams(search).get('roomId') || '';
     const [form] = Form.useForm();
+    const [title, setTitle] = useState('');
+    const [priceRoom, setPriceRoom] = useState<number | null>(null);
+    // const [avatarRoom, setAvatarRoom] = useState<any>();
+    const [commissionPercentage, setCommissionPercentage] = useState<number | null>(null);
+    const [dateStart, setDateStart] = useState<Dayjs | null>(null);
+    const [dateEnd, setDateEnd] = useState<Dayjs | null>(null);
 
-    const [errors,] = useState<any>();
+    const handleSubmit = async (values: any) => {
+        const { title, price_room, avatar, commission_percentage, date_start, date_end } = values;
+        const formattedDateStart = moment(date_start).format('YYYY-MM-DD HH:mm:ss');
+        const formattedDateEnd = moment(date_end).format('YYYY-MM-DD HH:mm:ss');
+        const data = new FormData();
+        data.append('title', title);
+        data.append('price_room', price_room);
+        // data.append('avatar', avatar);
+        data.append('commission_percentage', commission_percentage);
+        data.append('date_start', formattedDateStart);
+        data.append('date_end', formattedDateEnd);
 
-    const getFeedback = (text: string) => {
-        if (!text) return {};
-        return ({
-            validateStatus: text ? 'error' : undefined,
-            help: text ? text : undefined,
-        });
+
+        const config = await {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: 'https://huionline.vn/api/room/addroom',
+            data: data
+        };
+
+        axios.request(config)
+            .then((response: { data: any; }) => {
+                console.log(JSON.stringify(response.data));
+            })
+            .catch((error: any) => {
+                console.log(error);
+            });
     };
 
-    const inputs: IStaffFormInput[] = useMemo(() => [
-        {
-            label: 'Tên phòng',
-            name: 'title',
-            placeholder: 'Nhập tên phòng',
-            type: 'text',
-            rules: [
-                {
-                    validator(_, value,) {
-                        if (!value?.trim()) return Promise.reject(new Error('Vui lòng nhập tên phòng'));
-                        return Promise.resolve();
-                    },
-                },
-            ],
-            ...getFeedback(get(errors, ['title'])),
-        },
-        {
-            label: 'Giá hụi',
-            name: 'total_money',
-            placeholder: 'Nhập giá hụi',
-            type: 'number',
-            rules: [
-                {
-                    validator(_, value,) {
-                        if (!value?.trim()) return Promise.reject(new Error('Vui lòng nhập giá hụi'));
-                        return Promise.resolve();
-                    },
-                },
-            ],
-            ...getFeedback(get(errors, ['total_money'])),
-        },
-        {
-            label: 'Thời gian bắt đầu',
-            name: 'start_time',
-            placeholder: 'DD-MM-YYY',
-            type: 'date',
-            // rules: [
-            //     {
-            //         validator(_, value,) {
-            //             if (!value?.trim()) return Promise.reject(new Error('Vui lòng nhập thời gian bắt đầu'));
-            //             return Promise.resolve();
-            //         },
-            //     },
-            // ],
-            ...getFeedback(get(errors, ['start_time'])),
-        },
-        {
-            label: 'Thời gian kết thức',
-            name: 'end_time',
-            placeholder: 'Nhập tài khoản',
-            type: 'date',
-            // rules: [
-            //     {
-            //         validator(_, value,) {
-            //             if (!value?.trim()) return Promise.reject(new Error('Vui lòng nhập thời gian kết thúc'));
-            //             return Promise.resolve();
-            //         },
-            //     },
-            // ],
-            ...getFeedback(get(errors, ['end_time'])),
-        },
-        {
-            label: 'Số lượng khách hàng',
-            name: 'quantity',
-            placeholder: 'Nhập số lượng khách hàng',
-            type: 'number',
-            rules: [
-                {
-                    validator(_, value,) {
-                        if (!value?.trim()) return Promise.reject(new Error('Vui lòng nhập số lượng khách hàng'));
-                        return Promise.resolve();
-                    },
-                },
-            ],
-            ...getFeedback(get(errors, ['quantity'])),
-        },
-    ], [errors]);
+    const handleDateEndChange: DatePickerProps['onChange'] = (date: Dayjs | null) => {
+        setDateEnd(date);
+    };
+
+    const handleDateStartChange: DatePickerProps['onChange'] = (date: Dayjs | null) => {
+        setDateStart(date);
+    };
+
+    const handlePriceRoomChange = (value: number | null) => {
+        setPriceRoom(value);
+    };
+
+    const handleCommissionPercentageChange = (value: number | null) => {
+        setCommissionPercentage(value);
+    };
 
     return (
         <DetailRoomPageStyled>
             <Form
                 className='form-info'
                 form={form}
-                // onFinish={handleSubmit}
+                onFinish={handleSubmit}
                 scrollToFirstError
                 layout='vertical'>
                 <div className='title-room'>
@@ -113,7 +77,127 @@ const QuickRoomPage = () => {
                             <h1>Sửa phòng: {roomId}</h1>
                     }
                 </div>
-                <StaffFormContent inputs={inputs} />
+                <div>
+                    <p>Tên phòng</p>
+                    <Form.Item
+                        name={'title'}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Vui lòng nhập tên phòng!',
+                            },
+                        ]}
+                    >
+                        <Input
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            placeholder={'Nhập tên phòng'}
+                            autoFocus
+                        />
+                    </Form.Item>
+                </div>
+
+                <div>
+                    <p>Giá hụi</p>
+                    <Form.Item
+                        name={'price_room'}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Vui lòng nhập giá hụi!',
+                            },
+                        ]}
+                    >
+                        <InputNumber
+                            value={priceRoom}
+                            onChange={handlePriceRoomChange}
+                            placeholder={'Nhập giá hụi'}
+                            autoFocus
+                        />
+                    </Form.Item>
+                </div>
+
+                {/* <div>
+                    <p>Hình</p>
+                    <Form.Item
+                        name={'avatar'}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Vui lòng thêm hình!',
+                            },
+                        ]}
+                    >
+                        <input
+                            value={avatarRoom}
+                            type='file'
+                            onChange={(e) => setAvatarRoom(e.target.value)}
+                            placeholder={'Thêm hình'}
+                            autoFocus
+                        />
+                    </Form.Item>
+                </div> */}
+
+                <div>
+                    <p>Hoa hồng</p>
+                    <Form.Item
+                        name={'commission_percentage'}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Vui lòng nhập hoa hồng!',
+                            },
+                        ]}
+                    >
+                        <InputNumber
+                            value={commissionPercentage}
+                            onChange={handleCommissionPercentageChange}
+                            placeholder={'Nhập hoa hồng'}
+                            autoFocus
+                        />
+                    </Form.Item>
+                </div>
+
+                <div>
+                    <p>Giờ bắt đầu</p>
+                    <Form.Item
+                        name={'date_start'}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Vui lòng nhập giờ bắt đầu!',
+                            },
+                        ]}
+                    >
+                        <DatePicker
+                            value={dateStart}
+                            onChange={handleDateStartChange}
+                            placeholder={'Nhập giờ bắt đầu'}
+                            autoFocus
+                        />
+                    </Form.Item>
+                </div>
+
+                <div>
+                    <p>Giờ kết thúc</p>
+                    <Form.Item
+                        name={'date_end'}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Vui lòng nhập giờ kết thúc!',
+                            },
+                        ]}
+                    >
+                        <DatePicker
+                            value={dateEnd}
+                            onChange={handleDateEndChange}
+                            placeholder={'Nhập tên giờ kết thúc'}
+                            autoFocus
+                        />
+                    </Form.Item>
+                </div>
+
                 <div className='button-container'>
                     {
                         roomId ?

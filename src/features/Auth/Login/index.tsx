@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import style from '../styles/index.module.scss';
-import { Form, Input } from 'antd';
-// import { get } from 'lodash';
+import { Form, Input, message } from 'antd';
 import styled from 'styled-components';
 import { useSetLoadingPage } from '../../../services/UI/LoadingPage';
 // import apisAuth from '../services/api';
@@ -9,11 +8,13 @@ import { useSetLoadingPage } from '../../../services/UI/LoadingPage';
 // import { useAppDispatch } from '../../../store/hooks';
 import { useNavigate } from 'react-router-dom';
 // import actions from '../services/actions';
-// import { getDeviceId } from '../../../utils/unit';
+import { get } from 'lodash';
+import axios from 'axios';
+// import axios from 'axios';
 const LoginPage = () => {
     const [form] = Form.useForm();
     const setIsLoading = useSetLoadingPage();
-    const [error, ] = useState('');
+    const [error,] = useState('');
     const [email, setEmail] = useState('');
     // const dispatch = useAppDispatch();
     const navigate = useNavigate();
@@ -26,49 +27,81 @@ const LoginPage = () => {
 
     // const setupLogin = (resData: any) => {
     //     // setToken(resData?.access_token ?? '');
-    //     const merchant_code = resData?.user?.merchant?.merchant_code;
-    //     storage.merchantCode.set(merchant_code);
-    //     storage.isConfirmDevice.set('');
-    //     storage.merchantName.set(resData?.user?.merchant?.merchant_name);
-    //     storage.merchantId.set(resData?.user?.merchant?.merchant_id);
-
-
+    //     // const merchant_code = resData?.user?.merchant?.merchant_code;
+    //     // storage.merchantCode.set(merchant_code);
+    //     // storage.isConfirmDevice.set('');
+    //     // storage.merchantName.set(resData?.user?.merchant?.merchant_name);
+    //     // storage.merchantId.set(resData?.user?.merchant?.merchant_id);
     //     // dispatch(actions.login.success(resData));
-    //     // dispatch(settingActions.getSetting.fetch());
 
     //     navigate(
     //         '/private/room'
     //     );
     // };
 
+    // useEffect(() => {
+    //     const data = new FormData();
+    //     data.append('email', 'admin123@gmail.com');
+    //     data.append('password', 'admin123');
+
+    //     const config = {
+    //         method: 'post',
+    //         maxBodyLength: Infinity,
+    //         url: 'https://reeltimechat.000webhostapp.com/api/auth/login',
+    //         data: data
+    //     };
+
+    //     axios.request(config)
+    //         .then((response: { data: any; }) => {
+    //             console.log(JSON.stringify(response.data));
+    //         })
+    //         .catch((error: any) => {
+    //             console.log(error);
+    //         });
+    // }, []);
+
     const login = async (values: any) => {
         const { email, password } = values;
-        // const device_id = getDeviceId();
+        const data = new FormData();
+        data.append('email', email);
+        data.append('password', password);
+
+        const config = await {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: 'https://huionline.vn/api/auth/login',
+            data: data
+        };
+
+        axios.request(config)
+            .then((response: { data: any; }) => {
+                const token = get(response, 'data.access_token', '');
+                localStorage.setItem('tokenUser', token);
+                const msg = get(response, 'data.message', '');
+                if (msg) {
+                    message.success(msg);
+                    navigate(
+                        '/private/room'
+                    );
+                    return true;
+                }
+            })
+            .catch((error: any) => {
+                console.log(error);
+            });
         setIsLoading(true);
-        if (email || password) {
-            navigate(
-                '/private/room'
-            );
-        }
         // try {
-        //     const res = await apisAuth.login({ email, password, device_id });
-
-        //     if (!res.data?.data) throw { response: res };
-
-        //     const resData = res?.data?.data as any;
-
-        //     if (res.data?.data.device_confirm) {
-        //         modalConfirmRef.current?.show({
-        //             title: 'Xác nhận đăng nhập?',
-        //             msg: 'Chào mừng trở lại! Chúng tôi đã phát hiện một phiên đăng nhập khác từ một thiết bị khác bằng tài khoản của bạn. Để tiếp tục, vui lòng nhập số pin của bạn và nhấp vào \'Tiếp tục\'',
-        //             // submit: (values: any) => handleLoginConfirm(values, resData)
-        //         });
-        //         return;
+        //     // const res = await apisAuth.login(data);
+        //     const token = get(res, 'data.access_token', '');
+        //     localStorage.setItem('tokenUser', token);
+        //     const msg = get(res, 'data.message', '');
+        //     if (msg) {
+        //         message.success(msg);
+        //         navigate(
+        //             '/private/room'
+        //         );
+        //         return true;
         //     }
-
-        //     setupLogin(resData);
-
-        //     // const pathname = storage.pathname.get();
 
         // } catch (error) {
         //     const message = get(
@@ -115,8 +148,7 @@ const LoginPage = () => {
                                 },
                                 {
                                     type: 'email',
-                                    message:
-                                        'Vui lòng nhập đúng định dạng email!',
+                                    message: 'Vui lòng nhập đúng định dạng email!',
                                 },
                             ]}
                         >
@@ -124,9 +156,7 @@ const LoginPage = () => {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 type='email'
-                                placeholder={
-                                    'Nhập Email'
-                                }
+                                placeholder={'Nhập Email'}
                                 autoFocus
                             />
                         </Form.Item>
@@ -135,8 +165,7 @@ const LoginPage = () => {
                             rules={[
                                 {
                                     required: true,
-                                    message:
-                                        'Vui lòng nhập password',
+                                    message: 'Vui lòng nhập password',
                                 },
                             ]}
                         >

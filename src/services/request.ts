@@ -4,13 +4,12 @@ import queryString from 'query-string';
 import lodash from '../utils/lodash';
 import storage from '../utils/sessionStorage';
 
-const DOMAIN = 'http://apihui.42web.io/';
+const DOMAIN = 'https://reeltimechat.000webhostapp.com/';
 
 const axiosInstance = axios.create({
   baseURL: DOMAIN,
   headers: {
     Accept: 'application/json',
-    cookie: '__test=9d87c3cb29be6bb0fe27162d3b970995',
   },
 });
 
@@ -19,7 +18,7 @@ type mixType = string | number | null;
 type IFetchArg = {
   method?: 'get' | 'post' | 'delete' | 'put';
   url: string;
-  body?: Record<string, mixType | unknown> | FormData;
+  body?: Record<string, mixType | unknown> | FormData | string | undefined;
   params?: Record<string, mixType | Array<mixType>>;
   configs?: AxiosRequestConfig<Record<string, unknown | mixType>> | undefined;
 };

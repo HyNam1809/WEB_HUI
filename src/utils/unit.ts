@@ -14,3 +14,13 @@ export const getDeviceId = () => {
 
   return hash;
 };
+
+const VND = new Intl.NumberFormat('vi-VN', {
+  style: 'currency',
+  currency: 'VND',
+});
+
+export const formatMoney = (value: number) => {
+  // return `${(value ?? 0)?.toFixed(3)}đ`;
+  return `${VND.format(value ?? 0)}`;
+};
