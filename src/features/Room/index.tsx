@@ -103,22 +103,22 @@ justify-content: center;
 width: 100%;
 gap: 20px;
 .ant-card-bordered {
-    border: 5px solid #EF503A !important;
+    border: 1px solid #EF503A !important;
     border-radius: 12px !important;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
 .header-room {
     display: flex;
     justify-content: end;
     align-items: center;
-    max-width: 1400px;
+    max-width: 1200px;
 }
 .room-item {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
+    display: grid;
     gap: 20px;
-    max-width: 1400px;
+    max-width: 1200px;
     justify-content: center;
+    grid-template-columns: 1fr 1fr 1fr;
 }
 Button {
     &:hover {

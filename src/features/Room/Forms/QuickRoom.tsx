@@ -77,7 +77,7 @@ const QuickRoomPage = () => {
                             <h1>Sửa phòng: {roomId}</h1>
                     }
                 </div>
-                <div>
+                <div className='laybel'>
                     <p>Tên phòng</p>
                     <Form.Item
                         name={'title'}
@@ -97,7 +97,7 @@ const QuickRoomPage = () => {
                     </Form.Item>
                 </div>
 
-                <div>
+                <div className='laybel'>
                     <p>Giá hụi</p>
                     <Form.Item
                         name={'price_room'}
@@ -138,7 +138,7 @@ const QuickRoomPage = () => {
                     </Form.Item>
                 </div> */}
 
-                <div>
+                <div className='laybel'>
                     <p>Hoa hồng</p>
                     <Form.Item
                         name={'commission_percentage'}
@@ -158,7 +158,7 @@ const QuickRoomPage = () => {
                     </Form.Item>
                 </div>
 
-                <div>
+                <div className='laybel'>
                     <p>Giờ bắt đầu</p>
                     <Form.Item
                         name={'date_start'}
@@ -178,7 +178,7 @@ const QuickRoomPage = () => {
                     </Form.Item>
                 </div>
 
-                <div>
+                <div className='laybel'>
                     <p>Giờ kết thúc</p>
                     <Form.Item
                         name={'date_end'}
@@ -228,6 +228,18 @@ justify-content: center;
         font-size: 56px;
         font-weight: 700;
     }
+}
+.ant-input-number {
+    width: 100%;
+}
+.laybel {
+    width: 100%;
+}
+.ant-form {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    max-width: 1200px;
 }
 .button-container {
     display: flex;

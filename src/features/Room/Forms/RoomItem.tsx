@@ -19,7 +19,7 @@ const RoomItem = (data: RoomItemProps, handleClick: any) => {
                             {quantityUser >= 30 && <span className='enough-people'>Đã đủ người</span>}
                         </div>
                     }
-                    style={{ width: 400 }}
+                    style={{ width: 350 }}
                 >
                     <div className='card-row'>
                         <img className='image-room' src={data.avatar} alt="Room Avatar" />

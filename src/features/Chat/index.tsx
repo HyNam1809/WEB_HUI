@@ -21,32 +21,32 @@ const ChatPage = () => {
   const [inputMessage, setInputMessage] = useState('');
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const [userName, setUserName] = useState<any>();
-  
+
 
   useEffect(() => {
     const data = new FormData();
     const tokenUser = localStorage.getItem('tokenUser');
 
     const config = {
-        method: 'get',
-        maxBodyLength: Infinity,
-        url: 'https://huionline.vn/api/auth/profile',
-        headers: {
-            'Authorization': `Bearer ${tokenUser}`,
-        },
-        data: data
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: 'https://huionline.vn/api/auth/profile',
+      headers: {
+        'Authorization': `Bearer ${tokenUser}`,
+      },
+      data: data
     };
 
     axios.request(config)
-        .then((response: { data: any; }) => {
-            localStorage.setItem('responseUser', JSON.stringify(response.data.data.id));
-            
-            setUserName(response.data.data.name);
-        })
-        .catch((error: any) => {
-            console.log(error);
-        });
-}, []);
+      .then((response: { data: any; }) => {
+        localStorage.setItem('responseUser', JSON.stringify(response.data.data.id));
+
+        setUserName(response.data.data.name);
+      })
+      .catch((error: any) => {
+        console.log(error);
+      });
+  }, []);
 
   const currentUser = { user_name: userName, user_avatar: userName };
 
@@ -58,7 +58,7 @@ const ChatPage = () => {
       const response = await axios.get(`https://huionline.vn/api/message/room/${roomId}`);
       const { data } = response.data;
       console.log(data);
-      
+
       setMessages(data);
     } catch (error) {
       console.error('Error fetching messages:', error);
@@ -91,10 +91,10 @@ const ChatPage = () => {
     }
   };
 
-  
-  const storedResponseUser  = localStorage.getItem('responseUser') || '';
+
+  const storedResponseUser = localStorage.getItem('responseUser') || '';
   const responseUser = storedResponseUser.slice(1, -1);
-  
+
   const apiDSendMessage = async (newMessage: Message) => {
     const data = new FormData();
     data.append('room_id', roomId);
@@ -122,15 +122,14 @@ const ChatPage = () => {
 
   return (
     <ChatPageStyled>
-      {/* ... Your styled components and HTML structure */}
+      <div className='title-chat'>
+        <h1>Phòng Chat: {roomId}</h1>
+      </div>
       <div className="chat-container">
         <div className="messages">
           {messages.length === 0 && (
             <div className="no-messages">Bạn chưa có tin nhắn nào.</div>
           )}
-          <div className='title-chat'>
-            <h1>Phòng Chat: {roomId}</h1>
-          </div>
           {messages.map((msg) => (
             <div
               key={msg.id}
@@ -172,7 +171,12 @@ export default ChatPage;
 
 const ChatPageStyled = styled.div`
 position: relative;
-
+display: grid;
+align-items: center;
+justify-content: center;
+.chat-container {
+  width: 1200px;
+}
 .avatar {
   img {
     max-width: 40px;
@@ -184,9 +188,6 @@ position: relative;
   align-items: center;
   justify-content: center;
   margin-bottom: 50px;
-  position: fixed;
-  right: 0;
-  left: 0;
   h1 {
     font-size: 56px;
     font-weight: 700;
