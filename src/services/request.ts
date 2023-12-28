@@ -4,7 +4,7 @@ import queryString from 'query-string';
 import lodash from '../utils/lodash';
 import storage from '../utils/sessionStorage';
 
-const DOMAIN = 'https://reeltimechat.000webhostapp.com/';
+const DOMAIN = 'https://huionline.vn/';
 
 const axiosInstance = axios.create({
   baseURL: DOMAIN,

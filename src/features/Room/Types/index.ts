@@ -10,9 +10,9 @@ export interface RoomItemProps {
     id: number;
     title: string;
     price_room: number;
-    avatar: string;
     commission_percentage: number;
-    date_end: string,
-    date_start: string,
-    user_count: number
+    date_room_end: string,
+    total_user: number,
+    user_count: number,
+    payment_time: string
   }

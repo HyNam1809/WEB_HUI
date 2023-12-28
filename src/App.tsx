@@ -15,6 +15,7 @@ import InvoicePage from './features/Invoice';
 import QuickRoomPage from './features/Room/Forms/QuickRoom';
 import ChatPage from './features/Chat';
 import ItemInvoicePage from './features/Invoice/forms/ItemInvoice';
+import ProfilePage from './features/Auth/Profile';
 
 function AppUI() {
   const { loading, shield } = useRefreshToken();
@@ -29,6 +30,7 @@ function AppUI() {
           <Route path='chat' element={<ChatPage />} />
           <Route path='customer' element={<CustomerPage />} />
           <Route path='invoice' element={<InvoicePage />} />
+          <Route path='profile' element={<ProfilePage />} />
           <Route path='detail-invoice' element={<ItemInvoicePage />} />
         </Route>
         {/* <Route path='/' element={<HomePage />} /> */}

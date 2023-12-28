@@ -3,5 +3,5 @@ export const PATH = {
     Customer: '/private/customer',
     Invoice: '/private/invoice',
     DetailRoom: '/private/RoomDetail',
-    Logout: '/',
+    Profile: '/private/profile',
   };

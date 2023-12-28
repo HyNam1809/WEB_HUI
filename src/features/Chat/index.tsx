@@ -137,7 +137,12 @@ const ChatPage = () => {
             >
               {msg.user.user_name !== currentUser.user_name && (
                 <div className="avatar">
-                  <img src={msg.user.user_avatar} alt={msg.user.user_name} />
+                  {
+                    msg.user.user_avatar ?
+                      <img src={msg.user.user_avatar} alt={msg.user.user_name} /> :
+                      <p className='avatar-customer'>{msg.user.user_name.charAt(0)}</p>
+                  }
+
                 </div>
               )}
               <div className="message-info">
@@ -182,6 +187,19 @@ justify-content: center;
     max-width: 40px;
     max-height: 40px;
   }
+  .avatar-customer {
+    width: 40px;
+    height: 40px;
+    background: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    margin-right: 8px;
+    color: #FFFFFF;
+    font-weight: 500;
+    font-size: 16px;
+  }
 }
 .title-chat {
   display: flex;
@@ -209,4 +227,6 @@ button {
         opacity: 0.5;
     }
 }
+
+
 `;

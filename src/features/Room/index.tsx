@@ -1,47 +1,43 @@
-import { Button, Spin } from 'antd';
+import { Button, Spin, message } from 'antd';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import RoomItem from './Forms/RoomItem';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { get } from 'lodash';
+import apisRoom from './services/api';
+import apisAuth from '../Auth/services/api';
 
 const RoomPage = () => {
     const [listRoom, setListRoom] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const data = new FormData();
+        // const data = new FormData();
         const tokenUser = localStorage.getItem('tokenUser');
-
-        const config = {
-            method: 'get',
-            maxBodyLength: Infinity,
-            url: 'https://huionline.vn/api/auth/profile',
-            headers: {
-                'Authorization': `Bearer ${tokenUser}`,
-            },
-            data: data
-        };
-
-        axios.request(config)
-            .then((response: { data: any; }) => {
+        console.log(tokenUser);
+        const fetchData = async () => {
+            try {
+                const getProfile = await apisAuth.getProfile(tokenUser);
+                console.log(getProfile);
+                
+    
+                const response = await axios.request(getProfile);
                 localStorage.setItem('responseUser', JSON.stringify(response.data.data.id));
-            })
-            .catch((error: any) => {
+            } catch (error) {
                 console.log(error);
-            });
+            }
+        };
+    
+        fetchData();
     }, []);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('https://huionline.vn/api/rooms/10');
-                const apiListRoom = get(response, 'data.data', []);
+                const apiListRoom = await apisRoom.listRoomData();
                 setListRoom(apiListRoom);
                 setLoading(false);
             } catch (error) {
-                console.error('Error fetching data:', error);
                 setLoading(false);
             }
         };
@@ -51,7 +47,6 @@ const RoomPage = () => {
 
     const storedResponseUser = localStorage.getItem('responseUser') || '';
     const responseUser = storedResponseUser.slice(1, -1);
-    console.log('responseUser', responseUser);
 
     const handleClick = async (idRoom: any) => {
         try {
@@ -59,15 +54,13 @@ const RoomPage = () => {
             data.append('room_id', idRoom);
             data.append('user_id', responseUser);
 
-            const config = {
-                method: 'post',
-                maxBodyLength: Infinity,
-                url: 'https://huionline.vn/api/room/actionroom',
-                data: data,
-            };
-
-            const response = await axios.request(config);
-            console.log(JSON.stringify(response.data));
+            const actionResponse = await apisRoom.jobRoom(data);
+            if (actionResponse) {
+                message.success(actionResponse.message);
+                return true;
+            } else {
+                message.error('Vui lòng thử lại');
+            }
         } catch (error) {
             console.error('Error:', error);
         }
@@ -80,15 +73,20 @@ const RoomPage = () => {
     return (
         <RoomStyled>
             <div className='header-room'>
+                <h1>Phòng chơi</h1>
                 <Link to='/private/Quick-Room'>
                     <Button>Thêm phòng</Button>
                 </Link>
             </div>
             <div className='room-item'>
                 {listRoom.map((o: any, index: any) => (
-                    <Link key={index} to={`/private/Quick-Room?roomId=${o.id}`}>
-                        <RoomItem handleClick={handleClick(o.id)} key={index} {...o} />
-                    </Link>
+                    // eslint-disable-next-line react/jsx-key
+                    <div onClick={() => handleClick(o.id)}>
+                        <Link key={index} to={`/private/Quick-Room?roomId=${o.id}`}>
+                            <RoomItem key={index} {...o} />
+                        </Link>
+                    </div>
+
                 ))}
             </div>
         </RoomStyled>
@@ -103,15 +101,18 @@ justify-content: center;
 width: 100%;
 gap: 20px;
 .ant-card-bordered {
-    border: 1px solid #EF503A !important;
     border-radius: 12px !important;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
 .header-room {
     display: flex;
-    justify-content: end;
-    align-items: center;
+    justify-content: space-between;
+    align-items: end;
     max-width: 1200px;
+    margin-bottom: 50px;
+    h1 {
+        font-size: 56px;
+    }
 }
 .room-item {
     display: grid;

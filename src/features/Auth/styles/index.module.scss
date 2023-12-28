@@ -3,28 +3,43 @@
 .container {
   height: 100vh;
   display: flex;
+  background-image: linear-gradient(to right, #EF503A, #FFF0E2);
+  justify-content: center;
+  align-items: center;
 
-  .bg_login {
-    flex: 2;
-    background-position-x: center;
-    background-image: url('https://i.fbcd.co/products/original/6608b9ecff858d3b1ccb13ca4276eff237707584212c7a493fc2c031c18b2112.jpg');
-  }
-
-  .form {
-    flex: 1;
+  .form_container {
+    background: #FFFFFF;
+    width: 100%;
+    padding: 150px 50px;
+    margin: 100px 100px;
     display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
     border-radius: 16px;
-    padding: 0 20px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 
-    .titleLogin {
-      font-size: 56px;
-      text-align: center;
-      font-weight: 700;
-      margin-bottom: 50px;
+    .bg_login {
+      flex: 2;
+      svg {
+        width: 100%;
+        height: 500px;
+      }
+    }
+
+    .form {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      border-radius: 16px;
+      padding: 0 20px;
+
+      .titleLogin {
+        font-size: 56px;
+        text-align: center;
+        font-weight: 700;
+        margin-bottom: 50px;
+      }
     }
   }
-}
 
+}

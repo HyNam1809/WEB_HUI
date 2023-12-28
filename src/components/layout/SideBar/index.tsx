@@ -9,8 +9,9 @@ type Props = {
 };
 
 const SideBar = (props: Props) => {
-    const { isShowSidebar,  } = props;
+    const { isShowSidebar, } = props;
     const [, setOpenSubSidebar] = useState(false);
+
     const getNavbar = () => {
         return [
             {
@@ -27,8 +28,8 @@ const SideBar = (props: Props) => {
                 path: PATH.Invoice,
             },
             {
-                text: 'Đang xuất',
-                path: PATH.Logout,
+                text: 'Thông tin cá nhân',
+                path: PATH.Profile,
             },
 
         ];
@@ -37,7 +38,7 @@ const SideBar = (props: Props) => {
     const activeStyle = {
         background: '#FFFFFF',
         color: '#000000',
-      };
+    };
 
     return (
         <>
@@ -53,7 +54,9 @@ const SideBar = (props: Props) => {
                         {getNavbar().map((nav) => {
                             const { text, path } = nav;
                             return (
-                                <li key={path} className={`${styles.navbar_item}`} onClick={e => e.stopPropagation()}>
+                                <li key={path} className={`${styles.navbar_item}`} onClick={(e) => {
+                                    e.stopPropagation();
+                                }}>
                                     <NavLink
                                         reloadDocument={path === PATH.Room}
                                         to={path}

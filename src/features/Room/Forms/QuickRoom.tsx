@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { Button, DatePicker, DatePickerProps, Form, Input, InputNumber } from 'antd';
+import { Button, DatePicker, DatePickerProps, Form, Input, InputNumber, Select, message } from 'antd';
 import { Dayjs } from 'dayjs';
-import axios from 'axios';
-import moment from 'moment';
+import apisRoom from '../services/api';
 
 const QuickRoomPage = () => {
     const search = useLocation().search;
@@ -12,46 +11,41 @@ const QuickRoomPage = () => {
     const [form] = Form.useForm();
     const [title, setTitle] = useState('');
     const [priceRoom, setPriceRoom] = useState<number | null>(null);
-    // const [avatarRoom, setAvatarRoom] = useState<any>();
     const [commissionPercentage, setCommissionPercentage] = useState<number | null>(null);
-    const [dateStart, setDateStart] = useState<Dayjs | null>(null);
     const [dateEnd, setDateEnd] = useState<Dayjs | null>(null);
-
+    const navigate = useNavigate();
     const handleSubmit = async (values: any) => {
-        const { title, price_room, avatar, commission_percentage, date_start, date_end } = values;
-        const formattedDateStart = moment(date_start).format('YYYY-MM-DD HH:mm:ss');
-        const formattedDateEnd = moment(date_end).format('YYYY-MM-DD HH:mm:ss');
+        const { title, price_room, commission_percentage, total_user, payment_time, date_room_end } = values;
+        const formattedDateEnd = date_room_end.format('YYYY-MM-DD HH:mm:ss');
+
         const data = new FormData();
         data.append('title', title);
         data.append('price_room', price_room);
-        // data.append('avatar', avatar);
         data.append('commission_percentage', commission_percentage);
-        data.append('date_start', formattedDateStart);
-        data.append('date_end', formattedDateEnd);
+        data.append('payment_time', payment_time);
+        data.append('date_room_end', formattedDateEnd);
+        data.append('total_user', total_user);
 
-
-        const config = await {
-            method: 'post',
-            maxBodyLength: Infinity,
-            url: 'https://huionline.vn/api/room/addroom',
-            data: data
-        };
-
-        axios.request(config)
-            .then((response: { data: any; }) => {
-                console.log(JSON.stringify(response.data));
-            })
-            .catch((error: any) => {
-                console.log(error);
-            });
+        try {
+            const result = await apisRoom.addRoom(data);
+            if (result) {
+                message.success(result.message);
+                navigate(-1);
+                return true;
+            }
+        } catch (error: any) {
+            if (error.response) {
+                message.error(error.response.data.message || 'Có lỗi xảy ra từ phía server');
+            } else if (error.message) {
+                message.error(error.message);
+            } else {
+                message.error('Có lỗi xảy ra');
+            }
+        }
     };
 
     const handleDateEndChange: DatePickerProps['onChange'] = (date: Dayjs | null) => {
         setDateEnd(date);
-    };
-
-    const handleDateStartChange: DatePickerProps['onChange'] = (date: Dayjs | null) => {
-        setDateStart(date);
     };
 
     const handlePriceRoomChange = (value: number | null) => {
@@ -60,6 +54,10 @@ const QuickRoomPage = () => {
 
     const handleCommissionPercentageChange = (value: number | null) => {
         setCommissionPercentage(value);
+    };
+
+    const cancelOnclick = () => {
+        navigate(-1);
     };
 
     return (
@@ -117,27 +115,6 @@ const QuickRoomPage = () => {
                     </Form.Item>
                 </div>
 
-                {/* <div>
-                    <p>Hình</p>
-                    <Form.Item
-                        name={'avatar'}
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Vui lòng thêm hình!',
-                            },
-                        ]}
-                    >
-                        <input
-                            value={avatarRoom}
-                            type='file'
-                            onChange={(e) => setAvatarRoom(e.target.value)}
-                            placeholder={'Thêm hình'}
-                            autoFocus
-                        />
-                    </Form.Item>
-                </div> */}
-
                 <div className='laybel'>
                     <p>Hoa hồng</p>
                     <Form.Item
@@ -159,40 +136,70 @@ const QuickRoomPage = () => {
                 </div>
 
                 <div className='laybel'>
-                    <p>Giờ bắt đầu</p>
+                    <p>Tổng người dùng</p>
                     <Form.Item
-                        name={'date_start'}
+                        name={'total_user'}
                         rules={[
                             {
                                 required: true,
-                                message: 'Vui lòng nhập giờ bắt đầu!',
+                                message: 'Vui lòng nhập số lượng người dùng!',
                             },
                         ]}
                     >
-                        <DatePicker
-                            value={dateStart}
-                            onChange={handleDateStartChange}
-                            placeholder={'Nhập giờ bắt đầu'}
+                        <InputNumber
+                            min={2}
+                            max={30}
+                            value={commissionPercentage}
+                            onChange={handleCommissionPercentageChange}
+                            placeholder={'Nhập số lượng người dùng'}
                             autoFocus
                         />
                     </Form.Item>
                 </div>
 
                 <div className='laybel'>
-                    <p>Giờ kết thúc</p>
+                    <p>Thời gian thanh toán</p>
                     <Form.Item
-                        name={'date_end'}
+                        name={'payment_time'}
                         rules={[
                             {
                                 required: true,
-                                message: 'Vui lòng nhập giờ kết thúc!',
+                                message: 'Vui lòng nhập ngày bắt đầu!',
+                            },
+                        ]}
+                    >
+                        <Select
+                            placeholder="Chọn thời gian thanh toán"
+                            options={[
+                                {
+                                    value: 'End day',
+                                    label: 'Cuối ngày',
+                                },
+                                {
+                                    value: 'End of Month',
+                                    label: 'Cuối tháng',
+                                },
+                            ]}
+                        />
+                    </Form.Item>
+                </div>
+
+                <div className='laybel'>
+                    <p>Ngày kết thúc phòng</p>
+                    <Form.Item
+                        name={'date_room_end'}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Vui lòng nhập ngày kết thúc!',
                             },
                         ]}
                     >
                         <DatePicker
+                            showTime
                             value={dateEnd}
                             onChange={handleDateEndChange}
-                            placeholder={'Nhập tên giờ kết thúc'}
+                            placeholder={'Nhập tên ngày kết thúc'}
                             autoFocus
                         />
                     </Form.Item>
@@ -204,10 +211,16 @@ const QuickRoomPage = () => {
                             <Button htmlType='submit'>Lưu</Button> :
                             <Button htmlType='submit'>Thêm</Button>
                     }
-                    <Button htmlType='reset'>Hủy</Button>
-                    <Link to={`/private/Chat?roomId=${roomId}`}>
-                        <Button>Chat</Button>
-                    </Link>
+                    <Button htmlType='reset'>Xóa</Button>
+                    <Button onClick={cancelOnclick}>Quay lại</Button>
+                    {
+                        roomId ?
+                            <Link to={`/private/Chat?roomId=${roomId}`}>
+                                <Button>Chat</Button>
+                            </Link> :
+                            <></>
+                    }
+
                 </div>
             </Form>
         </DetailRoomPageStyled>
@@ -234,6 +247,12 @@ justify-content: center;
 }
 .laybel {
     width: 100%;
+    display: grid;
+    gap: 4px;
+    p {
+        font-size: 16px;
+        font-weight: 600;
+    }
 }
 .ant-form {
     display: flex;
